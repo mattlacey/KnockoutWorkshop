@@ -10,7 +10,9 @@ Creating a basic Visualforce page that will be Salesforce1 friendly is very easy
 4. In the Developer Console, choose *File -> New -> Visualforce Page* and then enter a name for the page.
 5. Replace the initial code with the following:
 
-`<apex:page standardController="Account" showHeader="false" sidebar="false" standardStylesheets="false">
+```Visualforce
+<apex:page standardController="Account" showHeader="false" sidebar="false" standardStylesheets="false">
 	<h1><apex:outputText value="{!Account}"/></h1>
-</apex:page>`
+</apex:page>
+```
 
