@@ -16,3 +16,16 @@ Creating a basic Visualforce page that will be Salesforce1 friendly is very easy
 </apex:page>
 ```
 
+6. Make the page easy to access by creating a new custom button on the Account object, via  *Setup -> Customize -> Accounts -> Buttons, Links, and Actions* and cicking *New Button or Link*.
+![Account Settings](./Images/AccountSettings.png "Account Buttons, Links and Actions")
+
+7. Fill in the button details as in the image below, and click *Save*. Your Visualforce page will be available because we used the Account standard controller.
+![Custom Button Settings](./Images/CustomButton.png "Use these settings for your button")
+
+8. Finally, navigate to the Accounts tab, choose an Account and edit the page layout to include the new button.
+![Editing The Page Layout](./Images/EditLayout.png "This is the link to edit a page layout")
+![Editing The Page Layout - Adding The Button](./Images/AddingCustomButton.png "Drag the button to the custom buttons area")
+
+
+
+
