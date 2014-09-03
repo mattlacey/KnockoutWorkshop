@@ -10,11 +10,11 @@ Creating a basic Visualforce page that will be Salesforce1 friendly is very easy
 4. In the Developer Console, choose *File -> New -> Visualforce Page* and then enter a name for the page.
 5. Replace the initial code with the following:
 
-```Visualforce
-<apex:page standardController="Account" showHeader="false" sidebar="false" standardStylesheets="false">
-	<h1><apex:outputText value="{!Account}"/></h1>
-</apex:page>
-```
+    ```Visualforce
+    <apex:page standardController="Account" showHeader="false" sidebar="false" standardStylesheets="false">
+    	<h1><apex:outputText value="{!Account}"/></h1>
+    </apex:page>
+    ```
 
 6. Make the page easy to access by creating a new custom button on the Account object, via  *Setup -> Customize -> Accounts -> Buttons, Links, and Actions* and cicking *New Button or Link*.
 ![Account Settings](./Images/AccountSettings.png "Account Buttons, Links and Actions")
@@ -26,6 +26,6 @@ Creating a basic Visualforce page that will be Salesforce1 friendly is very easy
 ![Editing The Page Layout](./Images/EditLayout.png "This is the link to edit a page layout")
 ![Editing The Page Layout - Adding The Button](./Images/AddingCustomButton.png "Drag the button to the custom buttons area")
 
-
+If you click the button you'll now see your exciting new page... that shows the Account ID. Time to make it a bit more interesting!
 
 
