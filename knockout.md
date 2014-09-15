@@ -65,19 +65,25 @@ The three basic things we need to do to start with are to create a View Model in
 
 3. The next step is to sort out the View part of the equation, that is the part that displays the data provided by the View Model. So replace the old line with the `<h1>` tags with the following:
 
+	```
 	<div class="panel">
 		<h1 data-bind="text: accountName"></h1>
 	</div>
+	```
 
  As you can probably guess at this point KnockoutJS uses a special attribute called `data-bind` to bind parts of the View to the data in the View Model. In this case, we're using the `text` binding variant to use the `accountName` property of the View Model as the content for the `<h1>` tags.
 
 4. If you've viewed the page at this point, you won't have seen anything on the screen, and that's because we haven't connected to the View Model to it's view. We do this with simple call to the `applyBindings` method provided by KnockoutJS. This method takes one parameter which is an instance of the View Model. We want this link to be created when the page has loaded, so we'll create a quick one-line function and assign it to `window.onload` right before the closing script tag.
 
+	```
     window.onload = function() { ko.applyBindings(new rolodexModel()) };
+    ```
 
 5. Navigate to the page from an account using the custom button created in step 1 and you should see the account's name on the screen. If not, check your browser's developer tools console for any javascript errors. The page is pretty plain at this point, so add the following line underneath the opening page tag to include some pre-prepared CSS.
 
+	```
 	<link rel="//dl.dropboxusercontent.com/u/18791682/DF/dfko.css"/>
+	```
 
 
 
