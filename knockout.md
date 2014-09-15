@@ -120,17 +120,17 @@ Now we've got a the framework in place we'll start expanding our setup, and modi
 
 4. Now we need to modify the View Model so that it pulls a list of contacts from the controller, but to do that we'll need somewhere to store them in the model. Obviously an array is required, but because this will be something that changes over time (using remoting means we'll load the contacts after the page has loaded) we need to use what's known as an *observable array*. Observables and observable arrays are mechanisms provided KnockoutJS that creates a dynamic, two-way binding between the View and View Model. This means if a value changes in the View Model it will be repfected in the view, and vice versa. Modify the View Model so that it looks like this:
 
-		```
-		function rolodexModel()
-		{
-			var self = this;
+	```
+	function rolodexModel()
+	{
+		var self = this;
 
-			self.accountId = '{!Account.Id}';
-			self.accountName =  '{!Account.Name}';
+		self.accountId = '{!Account.Id}';
+		self.accountName =  '{!Account.Name}';
 
-			self.contacts = ko.observableArray();
-		}
-		```
+		self.contacts = ko.observableArray();
+	}
+	```
 
 	*Note:* a property has been created called `self` so that in any code added to the model we have an easy way to reference the model itself. Using `this` can get particularly tricky in Javascript when dealing with callbacks and other idioms.
 
@@ -138,12 +138,12 @@ Now we've got a the framework in place we'll start expanding our setup, and modi
 
 The upshot of this is that because we our Apex method returns a list of contacts, we can simply assign the result straight to our contacts observable array. Before the closing brace of the view model, add the code below. This calls the method provided by the extension controller, which uses a callback function that runs when the request completes. The `result` parameter will be an array of records, and we use this data without modification.
 
-		```
-		RolodexRemoting.LoadContacts(self.accountId, function(result, event)
-		{
-			self.contacts(result);
-		});
-		```
+	```
+	RolodexRemoting.LoadContacts(self.accountId, function(result, event)
+	{
+		self.contacts(result);
+	});
+	```
 
 6. Now we'll display these contacts under the account name by updating our view. To loop over the contacts we need to use another binding variant, this time we use `foreach`. This can be applied to any element (in this case a div) and then the contents of that element, including bindings, are repeated and evaluated for each item in the array. Add the following code after the `<h1>` tags and reload the page, you should see the account name as before, and then after a short delay the list of contacts will appear when the remoting call completes.
 
