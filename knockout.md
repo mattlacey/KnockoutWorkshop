@@ -63,7 +63,7 @@ The three basic things we need to do to start with are to create a View Model in
 	</script>
 	```
 
-3. The next step is to sort out the View part of the equation, that is the part that displays the data provided by the View Model. So replace the old line with the `<h1>` tags with the following:
+3. The next step is to sort out the View part of the equation, that is the part that displays the data provided by the View Model. The view in this case is all of the markup in the page, so replace the old line with the `<h1>` tags with the following:
 
 	```
 	<div class="panel">
@@ -84,6 +84,86 @@ The three basic things we need to do to start with are to create a View Model in
 	```
 	<link rel="//dl.dropboxusercontent.com/u/18791682/DF/dfko.css"/>
 	```
+
+
+##Step 3: Building On The Basics
+
+Now we've got a the framework in place we'll start expanding our setup, and modify the page so that it lists all of the contacts associated with an account (with a sensible limit of 100 for example purposes). We could just do this with Visualforce binding, but to keep things nice and clean we'll load the contacts using Javascript remoting, with a very simple Apex class providing the list of contacts with some chosen fields.
+
+1. Before making further changes to the page we'll first create the Apex class that will provide data from our model. In the Salesforce Developer Console choose *File -> New -> Apex Class* and then specicy a name, e.g. 'RolodexRemoting'. Replace the default class content with this code, which is a relatively standard starting point for an extension controller, with the small exception that the class has `global` scope, which is required for remoting classes. The constructor doesn't have anything in it's body as we're not going to use it, we merely need this constructor so that Visualforce will let us use the class as an extension controller alongside the Account standard controller the page uses at present. 
+
+	```
+	global class RolodexRemoting
+	{
+	    global RolodexRemoting(ApexPages.StandardController sc) {}
+	}
+	```
+
+2. Next, we need a remoting method that returns the contacts and fields we're interested in. For this exercise this is a one-liner, and simply returns the result of a SOQL query as a list of Contact records. It is static (as all remoting methods must be), and pulls the Id of the account being used from the page parameters.
+
+	```
+    @RemoteAction
+    global static List<Contact> LoadContacts()
+    {
+        Id accountId = ApexPages.currentPage().getParameters().get('id');
+        return [select Id, Name, Email, Phone
+                from Contact where AccountId = :accountId
+               	order by LastName asc];
+	}
+	```
+
+3. Once the class has been saved, switch back to the page source and add our new Apex class as an extension controller using the `extensions` attribute in the opening page tag:
+
+	```
+	<apex:page standardController="Account" extensions="RolodexRemoting" showHeader="false" sidebar="false" standardStylesheets="false">
+	```
+
+4. Now we need to modify the View Model so that it pulls a list of contacts from the controller, but to do that we'll need somewhere to store them in the model. Obviously an array is required, but because this will be something that changes over time (using remoting means we'll load the contacts after the page has loaded) we need to use what's known as an *observable array*. Observables and observable arrays are mechanisms provided KnockoutJS that creates a dynamic, two-way binding between the View and View Model. This means if a value changes in the View Model it will be repfected in the view, and vice versa.
+
+Modify the View Model so that it looks like this:
+
+	```
+	function rolodexModel()
+	{
+		var self = this;
+
+		self.accountId = '{!Account.Id}';
+		self.accountName =  '{!Account.Name}';
+
+		self.contacts = ko.observableArray();
+	}
+	```
+
+	*Note* a property has been created called `self` so that in any code added to the model we have an easy way to reference the model itself. Using `this` can get particularly tricky in Javascript when dealing with callbacks and other idioms.
+
+5. Assigning values to observables is easy, you simply pass it as a parameter, so if we had an observable called age, defined using `self.age = ko.observable;`, it could be set to a value such as 40 by doing `self.age(40);`. The same goes for observable arrays, so to set an array called people we could do `self.people(['Alice', 'Bob', 'Carol']);`.
+
+The upshot of this is that because we our Apex method returns a list of contacts, we can simply assign the result straight to our contacts observable array. Before the closing brace of the view model, add the code below. This calls the method provided by the extension controller, which uses a callback function that runs when the request completes. The `result` parameter will be an array of records, and we use this data without modification.
+
+	```
+	RolodexRemoting.LoadContacts(self.accountId, function(result, event)
+	{
+		self.contacts(result);
+	});
+	```
+6. Now we'll display these contacts under the account name by updating our view. To loop over the contacts we need to use another binding variant, this time we use `foreach`. This can be applied to any element (in this case a div) and then the contents of that element, including bindings, are repeated and evaluated for each item in the array. Add the following code after the `<h1>` tags and reload the page, you should see the account name as before, and then after a short delay the list of contacts will appear when the remoting call completes.
+
+	```
+	<div data-bind="foreach: contacts">
+		<div class="record">
+			<h2 data-bind="text: Name"/>
+		</div>
+	</div> 
+	```
+
+In this code, the "Name" bound to the text for the h2 element is the name of the field to display from the contact.
+
+
+
+
+
+
+
 
 
 
