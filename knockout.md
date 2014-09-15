@@ -132,7 +132,7 @@ Now we've got a the framework in place we'll start expanding our setup, and modi
 		}
 		```
 
-	*Note* a property has been created called `self` so that in any code added to the model we have an easy way to reference the model itself. Using `this` can get particularly tricky in Javascript when dealing with callbacks and other idioms.
+	*Note:* a property has been created called `self` so that in any code added to the model we have an easy way to reference the model itself. Using `this` can get particularly tricky in Javascript when dealing with callbacks and other idioms.
 
 5. Assigning values to observables is easy, you simply pass it as a parameter, so if we had an observable called age, defined using `self.age = ko.observable;`, it could be set to a value such as 40 by doing `self.age(40);`. The same goes for observable arrays, so to set an array called people we could do `self.people(['Alice', 'Bob', 'Carol']);`.
 
@@ -144,7 +144,7 @@ The upshot of this is that because we our Apex method returns a list of contacts
 			self.contacts(result);
 		});
 		```
-		
+
 6. Now we'll display these contacts under the account name by updating our view. To loop over the contacts we need to use another binding variant, this time we use `foreach`. This can be applied to any element (in this case a div) and then the contents of that element, including bindings, are repeated and evaluated for each item in the array. Add the following code after the `<h1>` tags and reload the page, you should see the account name as before, and then after a short delay the list of contacts will appear when the remoting call completes.
 
 		```
