@@ -153,8 +153,53 @@ The upshot of this is that because we our Apex method returns a list of contacts
 		</div>
 	</div> 
 	```
-
 In this code, the "Name" bound to the text for the h2 element is the name of the field to display from the contact.
+
+##Step 4: Taking Action
+
+Now that the list of contacts is being displayed, we'll look at leverageing some more KnockoutJS bindings to make things a bit more dynamic. We'll add a new panel that shows a contact's details when a contact is selected but will be hidden otherwise. 
+
+1. We'll need a property to store the selected contact, and as we'll want the UI to respond when the selected contact changes, that property will be an observable, so add this to the view model:
+
+	```self.selected = ko.observable();```
+
+2. To provide a selection mechanism, we need to create an action that can be called from the view. So after the remoting call we'll create a new function assigned to a property on the view model. This is short and sweet, it simply takes a contact as a parameter, and assigns it to the selected property.
+
+	```
+	self.selectContact = function(contact)
+	{
+		self.selected(contact);
+	};
+	```
+
+3. We've made all the changes required to the view model, we just need to modify the view to add a panel that will show the selected contact's details. This goes after the main div, and includes two new binding types; it uses `visible` so that it is only displayed when `selected` as a non-falsey value, and the `with` binding to specify what part of the view model this part of the view should use. `Name`, `Phone` and `Email` are not properties of the overall view model, but of a specific contact, so we tell this part to use the selected contact property as it's data source.
+
+	```
+	<div class="panel right" data-bind="visible: selected, with: selected">
+		<h1 data-bind="text: Name"/>
+		<h2 data-bind="text: Phone"/>
+		<h2 data-bind="text: Email"/>
+	</div>
+	```
+
+4. We've got a method to select a contact, and a way of displaying that contact, but no way of calling it as of yet. For this we can simply use the `click` binding to call the `selectContact` method, and by default it will pass the current item when used in a `foreach`. `$root` is required because we're working with repeated elements, and in the repeated content our main binding is to a contact, not the overall view model (hence why one `Name` binding in the source works for each contact record).
+
+	```
+	<div class="record" data-bind="click: $root.selectContact">
+		<h2 data-bind="text: Name"/>
+	</div>
+	```
+
+5. Refresh your page and click around - there should be no details visible until you click a contact, and then the panel will change as you click on others. Congratulations on getting to the grips with the basics of KnockoutJS!
+
+![The Final Result](./Images/FinalResult.png "The finished product!")
+
+##Further challenges to attempt:
+
+- Easy: Add a button to the details panel to close it
+- Easy: Highlight the selected contact in the list using the `css` binding, and the class `highlight` (provided in the CSS)
+- Hard: Allow editing of contacts in the panel, you'll need to look at the `value` binding and write a new remoting method, but it's surprisingly straight forward
+- Hard: Think about how to drive the fields used using fieldsets
 
 
 
