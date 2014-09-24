@@ -47,7 +47,7 @@ The three basic things we need to do to start with are to create a View Model in
 
 1. Before doing anything else we need to include the KnockoutJS source in our page, and to make that easy we'll use a CDN (Content Delivery Network) hosted version, so add the following line to the Rolodex page above right after the `<apex:page>` opening tag:
 
-    <script src="//cdnjs.cloudflare.com/ajax/libs/knockout/3.1.0/knockout-min.js"/>
+    `<script src="//cdnjs.cloudflare.com/ajax/libs/knockout/3.1.0/knockout-min.js"/>`
 
 2. Now we'll add a super simple View Model, so under the last line we'll add our own Javascript which will be the start of our Rolodex View Model. For now we'll just add two members to our model, and populate them with values from the account record using standard Visualforce notation:
 
